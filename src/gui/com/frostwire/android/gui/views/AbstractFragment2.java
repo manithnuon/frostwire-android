@@ -39,6 +39,10 @@ public abstract class AbstractFragment2 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (container == null) { // minor optimization
+            return null;
+        }
+
         View rootView = inflater.inflate(layoutResId, container, false);
 
         if (!rootView.isInEditMode()) {

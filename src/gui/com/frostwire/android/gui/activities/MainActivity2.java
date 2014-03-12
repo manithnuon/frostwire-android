@@ -20,6 +20,7 @@ package com.frostwire.android.gui.activities;
 
 import java.lang.ref.WeakReference;
 
+import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
