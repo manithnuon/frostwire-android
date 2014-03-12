@@ -20,7 +20,8 @@ package com.frostwire.android.gui.activities;
 
 import java.lang.ref.WeakReference;
 
-import android.app.FragmentManager;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -31,7 +32,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.frostwire.android.R;
+import com.frostwire.android.gui.fragments.AboutFragment2;
+import com.frostwire.android.gui.fragments.SearchFragment2;
 import com.frostwire.android.gui.mainmenu.XmlMenuAdapter;
+import com.frostwire.android.gui.mainmenu.XmlMenuItem;
 import com.frostwire.android.gui.views.AbstractActivity2;
 import com.frostwire.util.Ref;
 
@@ -84,7 +88,7 @@ public final class MainActivity2 extends AbstractActivity2 {
         setupDrawer();
 
         if (savedInstanceState == null) {
-            selectItem(0);
+            selectItem(0, false);
         }
     }
 
@@ -98,9 +102,35 @@ public final class MainActivity2 extends AbstractActivity2 {
         drawerLayout.setDrawerListener(drawerToggle);
     }
 
-    private void selectItem(int position) {
+    private void selectItem(int position, boolean stack) {
+        XmlMenuItem menuItem = (XmlMenuItem) drawerList.getItemAtPosition(position);
+        Fragment f = createFragmentByMenuId(menuItem.id);
+        FragmentTransaction t = getFragmentManager().beginTransaction();
+        t.replace(R.id.activity_main_content_frame, f);
+        if (stack) {
+            t.addToBackStack(null);
+        }
+        t.commit();
+
         drawerList.setItemChecked(position, true);
         drawerLayout.closeDrawer(drawerList);
+    }
+
+    private Fragment createFragmentByMenuId(int id) {
+        switch (id) {
+        case R.id.menu_main_search:
+            return new SearchFragment2();
+            //        case R.id.menu_main_library:
+            //            return library;
+            //        case R.id.menu_main_transfers:
+            //            return transfers;
+            //        case R.id.menu_main_peers:
+            //            return getWifiSharingFragment();
+        case R.id.menu_main_about:
+            return new AboutFragment2();
+        default:
+            throw new RuntimeException("No fragment for the menu id");
+        }
     }
 
     private static final class MenuDrawerToggle extends ActionBarDrawerToggle {
@@ -138,7 +168,7 @@ public final class MainActivity2 extends AbstractActivity2 {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             if (activityRef.get() != null) {
-                activityRef.get().selectItem(position);
+                activityRef.get().selectItem(position, true);
             }
         }
     }

@@ -81,6 +81,5 @@ public final class XmlMenuAdapter extends BaseAdapter {
 
         icon.setImageResource(item.iconResId);
         label.setText(item.titleResId);
-
     }
 }
