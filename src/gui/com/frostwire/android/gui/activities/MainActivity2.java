@@ -26,6 +26,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.frostwire.android.R;
@@ -56,17 +57,6 @@ public final class MainActivity2 extends AbstractActivity2 {
         }
 
         switch (item.getItemId()) {
-        //        case R.id.action_websearch:
-        //            // create intent to perform web search for this planet
-        //            Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-        //            intent.putExtra(SearchManager.QUERY, getActionBar().getTitle());
-        //            // catch event that there's no activity to handle intent
-        //            if (intent.resolveActivity(getPackageManager()) != null) {
-        //                startActivity(intent);
-        //            } else {
-        //                Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
-        //            }
-        //            return true;
         default:
             return super.onOptionsItemSelected(item);
         }
@@ -93,18 +83,23 @@ public final class MainActivity2 extends AbstractActivity2 {
         setupDrawer();
 
         if (savedInstanceState == null) {
-            //selectItem(0);
+            selectItem(0);
         }
     }
 
     private void setupDrawer() {
         drawerList = findView(R.id.activity_main_left_drawer);
         drawerList.setAdapter(new XmlMenuAdapter(this));
-        //drawerList.setOnItemClickListener(new DrawerItemClickListener());
+        drawerList.setOnItemClickListener(new MenuItemClickListener(this));
 
         drawerLayout = findView(R.id.activity_main_drawer_layout);
         drawerToggle = new MenuDrawerToggle(this, drawerLayout);
         drawerLayout.setDrawerListener(drawerToggle);
+    }
+
+    private void selectItem(int position) {
+        drawerList.setItemChecked(position, true);
+        drawerLayout.closeDrawer(drawerList);
     }
 
     private static final class MenuDrawerToggle extends ActionBarDrawerToggle {
@@ -120,15 +115,29 @@ public final class MainActivity2 extends AbstractActivity2 {
 
         public void onDrawerClosed(View view) {
             if (activityRef.get() != null) {
-                //getActionBar().setTitle(mTitle);
-                activityRef.get().invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                activityRef.get().invalidateOptionsMenu();
             }
         }
 
         public void onDrawerOpened(View drawerView) {
             if (activityRef.get() != null) {
-                //getActionBar().setTitle(mDrawerTitle);
-                activityRef.get().invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                activityRef.get().invalidateOptionsMenu();
+            }
+        }
+    }
+
+    private static final class MenuItemClickListener implements ListView.OnItemClickListener {
+
+        private final WeakReference<MainActivity2> activityRef;
+
+        public MenuItemClickListener(MainActivity2 activity) {
+            this.activityRef = Ref.weak(activity);
+        }
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (activityRef.get() != null) {
+                activityRef.get().selectItem(position);
             }
         }
     }
