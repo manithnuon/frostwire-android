@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.frostwire.android.R;
+import com.frostwire.android.gui.mainmenu.XmlMenuAdapter;
 import com.frostwire.android.gui.views.AbstractActivity2;
 import com.frostwire.util.Ref;
 
@@ -40,8 +41,8 @@ import com.frostwire.util.Ref;
  */
 public final class MainActivity2 extends AbstractActivity2 {
 
+    private ListView drawerList;
     private DrawerLayout drawerLayout;
-    private ListView mDrawerList;
     private ActionBarDrawerToggle drawerToggle;
 
     public MainActivity2() {
@@ -53,7 +54,7 @@ public final class MainActivity2 extends AbstractActivity2 {
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-    
+
         switch (item.getItemId()) {
         //        case R.id.action_websearch:
         //            // create intent to perform web search for this planet
@@ -97,23 +98,18 @@ public final class MainActivity2 extends AbstractActivity2 {
     }
 
     private void setupDrawer() {
-        //mTitle = mDrawerTitle = getTitle();
-        //mPlanetTitles = getResources().getStringArray(R.array.planets_array);
-        drawerLayout = (DrawerLayout) findViewById(R.id.activity_main_drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        drawerList = findView(R.id.activity_main_left_drawer);
+        drawerList.setAdapter(new XmlMenuAdapter(this));
+        //drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        // set up the drawer's list view with items and click listener
-        //mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-        //        R.layout.drawer_list_item, mPlanetTitles));
-        //mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
+        drawerLayout = findView(R.id.activity_main_drawer_layout);
         drawerToggle = new MenuDrawerToggle(this, drawerLayout);
         drawerLayout.setDrawerListener(drawerToggle);
     }
 
     private static final class MenuDrawerToggle extends ActionBarDrawerToggle {
 
-        private WeakReference<MainActivity2> activityRef;
+        private final WeakReference<MainActivity2> activityRef;
 
         public MenuDrawerToggle(MainActivity2 activity, DrawerLayout drawerLayout) {
             super(activity, drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
@@ -135,6 +131,5 @@ public final class MainActivity2 extends AbstractActivity2 {
                 activityRef.get().invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
             }
         }
-
     }
 }
