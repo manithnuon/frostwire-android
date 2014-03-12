@@ -18,10 +18,9 @@
 
 package com.frostwire.android.gui.views;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.view.Window;
 
 /**
  * 
@@ -30,32 +29,24 @@ import android.view.Window;
  * @author aldenml
  * 
  */
-public abstract class AbstractActivity2 extends FragmentActivity {
+public abstract class AbstractActivity2 extends Activity {
 
     private final int layoutResId;
-    private final boolean title;
 
-    public AbstractActivity2(int layoutResId, boolean title) {
+    public AbstractActivity2(int layoutResId) {
+        if (layoutResId == 0) {
+            throw new RuntimeException("Resource id can't be 0");
+        }
+
         this.layoutResId = layoutResId;
-        this.title = title;
-    }
-
-    public AbstractActivity2(int layoutResID) {
-        this(layoutResID, false);
     }
 
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
 
-        if (!title) {
-            requestWindowFeature(Window.FEATURE_NO_TITLE);
-        }
-
-        if (layoutResId != 0) {
-            setContentView(layoutResId);
-            initComponents();
-        }
+        setContentView(layoutResId);
+        initComponents();
     }
 
     @SuppressWarnings("unchecked")

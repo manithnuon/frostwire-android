@@ -48,7 +48,7 @@
         android:allowBackup="true"
         android:icon="@drawable/app_icon"
         android:label="@string/application_label"
-        android:theme="@style/FrostWireTheme" >
+        android:theme="@style/Theme.FrostWire" >
 
         <!-- activities -->
 

@@ -35,5 +35,7 @@ public final class MainActivity2 extends AbstractActivity2 {
 
     @Override
     protected void initComponents() {
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
     }
 }
