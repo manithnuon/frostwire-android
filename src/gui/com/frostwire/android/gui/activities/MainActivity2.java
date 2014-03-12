@@ -24,6 +24,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
@@ -48,6 +49,41 @@ public final class MainActivity2 extends AbstractActivity2 {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+    
+        switch (item.getItemId()) {
+        //        case R.id.action_websearch:
+        //            // create intent to perform web search for this planet
+        //            Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+        //            intent.putExtra(SearchManager.QUERY, getActionBar().getTitle());
+        //            // catch event that there's no activity to handle intent
+        //            if (intent.resolveActivity(getPackageManager()) != null) {
+        //                startActivity(intent);
+        //            } else {
+        //                Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
+        //            }
+        //            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
     protected void initComponents(Bundle savedInstanceState) {
 
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -66,8 +102,6 @@ public final class MainActivity2 extends AbstractActivity2 {
         drawerLayout = (DrawerLayout) findViewById(R.id.activity_main_drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-        // set a custom shadow that overlays the main content when the drawer opens
-        //mDrawerLayout.setDrawerShadow(R.drawable.activity_main_drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
         //mDrawerList.setAdapter(new ArrayAdapter<String>(this,
         //        R.layout.drawer_list_item, mPlanetTitles));
@@ -75,18 +109,6 @@ public final class MainActivity2 extends AbstractActivity2 {
 
         drawerToggle = new MenuDrawerToggle(this, drawerLayout);
         drawerLayout.setDrawerListener(drawerToggle);
-    }
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        drawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     private static final class MenuDrawerToggle extends ActionBarDrawerToggle {
