@@ -18,6 +18,8 @@
 
 package com.frostwire.android.gui.activities;
 
+import java.lang.ref.WeakReference;
+
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -27,6 +29,7 @@ import android.widget.ListView;
 
 import com.frostwire.android.R;
 import com.frostwire.android.gui.views.AbstractActivity2;
+import com.frostwire.util.Ref;
 
 /**
  * 
@@ -36,9 +39,9 @@ import com.frostwire.android.gui.views.AbstractActivity2;
  */
 public final class MainActivity2 extends AbstractActivity2 {
 
-    private DrawerLayout mDrawerLayout;
+    private DrawerLayout drawerLayout;
     private ListView mDrawerList;
-    private ActionBarDrawerToggle mDrawerToggle;
+    private ActionBarDrawerToggle drawerToggle;
 
     public MainActivity2() {
         super(R.layout.activity_main2);
@@ -47,9 +50,20 @@ public final class MainActivity2 extends AbstractActivity2 {
     @Override
     protected void initComponents(Bundle savedInstanceState) {
 
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
+
+        setupDrawer();
+
+        if (savedInstanceState == null) {
+            //selectItem(0);
+        }
+    }
+
+    private void setupDrawer() {
         //mTitle = mDrawerTitle = getTitle();
         //mPlanetTitles = getResources().getStringArray(R.array.planets_array);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_main_drawer_layout);
+        drawerLayout = (DrawerLayout) findViewById(R.id.activity_main_drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         // set a custom shadow that overlays the main content when the drawer opens
@@ -59,43 +73,46 @@ public final class MainActivity2 extends AbstractActivity2 {
         //        R.layout.drawer_list_item, mPlanetTitles));
         //mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
-
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the sliding drawer and the action bar app icon
-        mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
-        mDrawerLayout, /* DrawerLayout object */
-        R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
-        R.string.drawer_open, /* "open drawer" description for accessibility */
-        R.string.drawer_close /* "close drawer" description for accessibility */
-        ) {
-            public void onDrawerClosed(View view) {
-                //getActionBar().setTitle(mTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                //getActionBar().setTitle(mDrawerTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        if (savedInstanceState == null) {
-            //selectItem(0);
-        }
+        drawerToggle = new MenuDrawerToggle(this, drawerLayout);
+        drawerLayout.setDrawerListener(drawerToggle);
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
+        drawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    private static final class MenuDrawerToggle extends ActionBarDrawerToggle {
+
+        private WeakReference<MainActivity2> activityRef;
+
+        public MenuDrawerToggle(MainActivity2 activity, DrawerLayout drawerLayout) {
+            super(activity, drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
+
+            // aldenml: even if the parent class hold a strong reference, I decided to keep a weak one
+            this.activityRef = Ref.weak(activity);
+        }
+
+        public void onDrawerClosed(View view) {
+            if (activityRef.get() != null) {
+                //getActionBar().setTitle(mTitle);
+                activityRef.get().invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        }
+
+        public void onDrawerOpened(View drawerView) {
+            if (activityRef.get() != null) {
+                //getActionBar().setTitle(mDrawerTitle);
+                activityRef.get().invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        }
+
     }
 }
