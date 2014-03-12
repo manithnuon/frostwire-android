@@ -19,234 +19,341 @@
  */
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.frostwire.android" android:installLocation="preferExternal"
-	android:versionCode="117" android:versionName="1.2.2">
+    package="com.frostwire.android"
+    android:installLocation="preferExternal"
+    android:versionCode="117"
+    android:versionName="1.2.2" >
 
-	<uses-sdk android:minSdkVersion="15" android:targetSdkVersion="15" />
+    <uses-sdk
+        android:minSdkVersion="15"
+        android:targetSdkVersion="19" />
 
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-	<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-	<uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
-	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.SET_WALLPAPER" />
-	<uses-permission android:name="android.permission.VIBRATE" />
-	<uses-permission android:name="android.permission.WAKE_LOCK" />
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.WRITE_SETTINGS" />
-	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	<uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="com.android.vending.BILLING" />
 
+    <application
+        android:name="com.frostwire.android.gui.MainApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/app_icon"
+        android:label="@string/application_label"
+        android:theme="@style/FrostWireTheme" >
 
-	<application android:name="com.frostwire.android.gui.MainApplication"
-		android:allowBackup="true" android:icon="@drawable/app_icon"
-		android:label="@string/application_label" android:theme="@style/FrostWireTheme">
+        <!-- activities -->
 
-		<!-- activities -->
+        <activity
+            android:name="com.frostwire.android.gui.activities.MainActivity2"
+            android:label="@string/application_label" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-		<activity android:name="com.frostwire.android.gui.activities.MainActivity"
-			android:label="@string/application_label">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-				<category android:name="tv.ouya.intent.category.GAME"/>
-			</intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="tv.ouya.intent.category.GAME" />
+            </intent-filter>
 
-			<!-- handle .torrent urls, files and magnets -->
+            <!-- handle .torrent urls, files and magnets -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="*" android:pathPattern=".*\\.torrent" />
+
+                <data
+                    android:host="*"
+                    android:pathPattern=".*\\.torrent"
+                    android:scheme="http" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="https" android:host="*" android:pathPattern=".*\\.torrent" />
+
+                <data
+                    android:host="*"
+                    android:pathPattern=".*\\.torrent"
+                    android:scheme="https" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:mimeType="*/*" android:scheme="http" android:host="*" android:pathPattern=".*\\.torrent" />
+
+                <data
+                    android:host="*"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.torrent"
+                    android:scheme="http" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:mimeType="*/*" android:scheme="https" android:host="*" android:pathPattern=".*\\.torrent" />
+
+                <data
+                    android:host="*"
+                    android:mimeType="*/*"
+                    android:pathPattern=".*\\.torrent"
+                    android:scheme="https" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:mimeType="application/x-bittorrent" android:scheme="http" android:host="*" />
+
+                <data
+                    android:host="*"
+                    android:mimeType="application/x-bittorrent"
+                    android:scheme="http" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:mimeType="application/x-bittorrent" android:scheme="https" android:host="*" />
+
+                <data
+                    android:host="*"
+                    android:mimeType="application/x-bittorrent"
+                    android:scheme="https" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="magnet" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:mimeType="*/*" />
-                <data android:scheme="file" android:host="*" android:pathPattern=".*\\.torrent" />
-                <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\.torrent" />
-                <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\..*\\.torrent" />
-                <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\.torrent" />
-                <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\.torrent" />
-                <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.torrent" />
-                <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.torrent" />
-                <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.torrent" />
-                <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.torrent" />
-                <data android:scheme="file" android:host="*" android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.torrent" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*\\.torrent"
+                    android:scheme="file" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*\\..*\\.torrent"
+                    android:scheme="file" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*\\..*\\..*\\.torrent"
+                    android:scheme="file" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*\\..*\\..*\\..*\\.torrent"
+                    android:scheme="file" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*\\..*\\..*\\..*\\..*\\.torrent"
+                    android:scheme="file" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.torrent"
+                    android:scheme="file" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\.torrent"
+                    android:scheme="file" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.torrent"
+                    android:scheme="file" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.torrent"
+                    android:scheme="file" />
+                <data
+                    android:host="*"
+                    android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\..*\\.torrent"
+                    android:scheme="file" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="file" android:pathPattern=".*\\.torrent" />
-            </intent-filter>			
 
-			<!-- share a file sent by another app -->
-			<intent-filter>
-				<action android:name="android.intent.action.SEND" />
+                <data
+                    android:pathPattern=".*\\.torrent"
+                    android:scheme="file" />
+            </intent-filter>
 
-				<category android:name="android.intent.category.DEFAULT" />
+            <!-- share a file sent by another app -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
 
-				<data android:mimeType="*/*" />
-			</intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
 
-			<!-- share multiple files sent by another app -->
-			<intent-filter>
-				<action android:name="android.intent.action.SEND_MULTIPLE" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
 
-				<category android:name="android.intent.category.DEFAULT" />
+            <!-- share multiple files sent by another app -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
 
-				<data android:mimeType="*/*" />
-			</intent-filter>
-		</activity>
-		<activity android:name="com.frostwire.android.gui.activities.WizardActivity"
-			android:label="@string/application_label" android:screenOrientation="portrait" />
-		<activity android:name="com.frostwire.android.gui.activities.PreferencesActivity"
-			android:label="@string/activity_preferences_name" android:theme="@style/Preferences" />
-		<activity android:name="com.frostwire.android.gui.activities.BrowsePeerActivity"
-			android:label="@string/activity_browse_peer_name" />
-		<activity android:name=".gui.activities.MediaPlayerActivity"
-			android:label="@string/activity_mediaplayer_name"
-			android:screenOrientation="portrait" />
-		<activity android:name="com.frostwire.android.gui.activities.AboutActivity"
-			android:label="@string/activity_about" />
-	
-		<!-- offercast -->
-		<activity android:name="com.offercast.android.sdk.TermsAndConditionsActivity"
-			android:label="@string/application_label" />
-		<service android:name="com.offercast.android.sdk.OCService" />
-		<receiver android:name="com.offercast.android.sdk.OCBroadcastReceiver"
-			android:enabled="true" android:exported="false">
-			<intent-filter android:priority="1001">
-				<action android:name="android.intent.action.BOOT_COMPLETED" />
-			</intent-filter>
-		</receiver>
-	
-		<!-- offercast metadata development -->
-		<!-- 
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="*/*" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.frostwire.android.gui.activities.WizardActivity"
+            android:label="@string/application_label"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.frostwire.android.gui.activities.PreferencesActivity"
+            android:label="@string/activity_preferences_name"
+            android:theme="@style/Preferences" />
+        <activity
+            android:name="com.frostwire.android.gui.activities.BrowsePeerActivity"
+            android:label="@string/activity_browse_peer_name" />
+        <activity
+            android:name=".gui.activities.MediaPlayerActivity"
+            android:label="@string/activity_mediaplayer_name"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.frostwire.android.gui.activities.AboutActivity"
+            android:label="@string/activity_about" />
+
+        <!-- offercast -->
+        <activity
+            android:name="com.offercast.android.sdk.TermsAndConditionsActivity"
+            android:label="@string/application_label" />
+
+        <service android:name="com.offercast.android.sdk.OCService" />
+
+        <receiver
+            android:name="com.offercast.android.sdk.OCBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter android:priority="1001" >
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- offercast metadata development -->
+        <!--
 		<meta-data android:name="application-id" android:value="8"/> <meta-data 
 			android:name="access-token" android:value="805d0103-c3ab-4421-9708-cdc6328247fb"/> 
 			<meta-data android:name="store-name" android:value="Google"/> <meta-data 
 			android:name="store-category" android:value="Media &amp; Video"/>
-		-->
-	
-		<!-- offercast metadata production -->
-		<meta-data android:name="application-id" android:value="7" />
-		<meta-data android:name="access-token"
-			android:value="5e6c1ceb-2b03-4b2e-a57f-0876395149ad" />
-		<meta-data android:name="store-name" android:value="Google" />
-		<meta-data android:name="store-category" android:value="Media &amp; Video" />
-			
-	    <!--  appia activities -->
-		<activity
-		    android:name="com.appia.sdk.DisplayFullscreenAppWallActivity"
-		    android:configChanges="keyboard|keyboardHidden|orientation"
-		    android:theme="@android:style/Theme.Dialog" >
-		</activity>
-		<activity
-		    android:name="com.appia.sdk.DisplayAppWallActivity"
-		    android:configChanges="keyboard|keyboardHidden|orientation"
-		    android:theme="@android:style/Theme.Dialog" >
-		</activity>
-		<activity
-		    android:name="com.appia.sdk.DisplayBannerActivity"
-		    android:configChanges="keyboard|keyboardHidden|orientation"
-		    android:theme="@android:style/Theme.Dialog" >
-		</activity>
-		<service 
-		    android:name="com.appia.sdk.AppiaReferrerService"
-		    android:process=":com.appia.sdk.AppiaReferrerServiceProcess">
-		</service>
-		<service 
-		    android:name="org.openudid.OpenUDID_service">
-		    <intent-filter>
-		        <action android:name="org.OpenUDID.GETUDID" />
-		    </intent-filter>
-		</service>
-		<service android:name="org.openudid.OpenUDID_service">
-			<intent-filter>
-				<action android:name="com.mycompany.myapp.OPENUDIDOPTOUT" />
-			</intent-filter>
-		</service>
-	    <!--  eof appia activities -->
+        -->
 
 
-		<!-- providers -->
+        <!-- offercast metadata production -->
+        <meta-data
+            android:name="application-id"
+            android:value="7" />
+        <meta-data
+            android:name="access-token"
+            android:value="5e6c1ceb-2b03-4b2e-a57f-0876395149ad" />
+        <meta-data
+            android:name="store-name"
+            android:value="Google" />
+        <meta-data
+            android:name="store-category"
+            android:value="Media &amp; Video" />
 
-		<provider android:name="com.frostwire.android.core.providers.DocumentsProvider"
-			android:authorities="com.frostwire.android.core.providers.Documents" />
-		<provider android:name="com.frostwire.android.core.providers.SharingProvider"
-			android:authorities="com.frostwire.android.core.providers.Sharing" />
-		<provider android:name="com.frostwire.android.core.providers.ApplicationsProvider"
-			android:authorities="com.frostwire.android.core.providers.Applications" />
-		<provider android:name="com.frostwire.android.core.providers.TorrentsProvider"
-			android:authorities="com.frostwire.android.core.providers.Torrents" />
+        <!-- appia activities -->
+        <activity
+            android:name="com.appia.sdk.DisplayFullscreenAppWallActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        <activity
+            android:name="com.appia.sdk.DisplayAppWallActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        <activity
+            android:name="com.appia.sdk.DisplayBannerActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
 
-		<!-- services -->
+        <service
+            android:name="com.appia.sdk.AppiaReferrerService"
+            android:process=":com.appia.sdk.AppiaReferrerServiceProcess" >
+        </service>
+        <service android:name="org.openudid.OpenUDID_service" >
+            <intent-filter>
+                <action android:name="org.OpenUDID.GETUDID" />
+            </intent-filter>
+        </service>
+        <service android:name="org.openudid.OpenUDID_service" >
+            <intent-filter>
+                <action android:name="com.mycompany.myapp.OPENUDIDOPTOUT" />
+            </intent-filter>
+        </service>
+        <!-- eof appia activities -->
 
-		<service android:name="com.frostwire.android.gui.services.EngineService"
-			android:exported="false" />
-		<service android:name="com.frostwire.gui.upnp.android.UPnPService"
-			android:exported="false" />
-		<service android:name="com.frostwire.android.market.BillingService"
-			android:exported="false" />
 
-		<receiver android:name="com.frostwire.android.gui.services.EngineBroadcastReceiver">
-			<intent-filter>
-				<action android:name="android.intent.action.BOOT_COMPLETED" />
-			</intent-filter>
-		</receiver>
-		<receiver android:name="com.frostwire.android.market.BillingReceiver">
-			<intent-filter>
-				<action android:name="com.android.vending.billing.IN_APP_NOTIFY" />
-				<action android:name="com.android.vending.billing.RESPONSE_CODE" />
-				<action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
-			</intent-filter>
-		</receiver>
-		<receiver android:name = "com.amazon.inapp.purchasing.ResponseReceiver" >
-	        <intent-filter>
-            	<action android:name = "com.amazon.inapp.purchasing.NOTIFY"
-                    android:permission = "com.amazon.inapp.purchasing.Permission.NOTIFY" />
-    	    </intent-filter>
+        <!-- providers -->
+
+        <provider
+            android:name="com.frostwire.android.core.providers.DocumentsProvider"
+            android:authorities="com.frostwire.android.core.providers.Documents" />
+        <provider
+            android:name="com.frostwire.android.core.providers.SharingProvider"
+            android:authorities="com.frostwire.android.core.providers.Sharing" />
+        <provider
+            android:name="com.frostwire.android.core.providers.ApplicationsProvider"
+            android:authorities="com.frostwire.android.core.providers.Applications" />
+        <provider
+            android:name="com.frostwire.android.core.providers.TorrentsProvider"
+            android:authorities="com.frostwire.android.core.providers.Torrents" />
+
+        <!-- services -->
+
+        <service
+            android:name="com.frostwire.android.gui.services.EngineService"
+            android:exported="false" />
+        <service
+            android:name="com.frostwire.gui.upnp.android.UPnPService"
+            android:exported="false" />
+        <service
+            android:name="com.frostwire.android.market.BillingService"
+            android:exported="false" />
+
+        <receiver android:name="com.frostwire.android.gui.services.EngineBroadcastReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
         </receiver>
-	</application>
+        <receiver android:name="com.frostwire.android.market.BillingReceiver" >
+            <intent-filter>
+                <action android:name="com.android.vending.billing.IN_APP_NOTIFY" />
+                <action android:name="com.android.vending.billing.RESPONSE_CODE" />
+                <action android:name="com.android.vending.billing.PURCHASE_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.amazon.inapp.purchasing.ResponseReceiver" >
+            <intent-filter>
+                <action
+                    android:name="com.amazon.inapp.purchasing.NOTIFY"
+                    android:permission="com.amazon.inapp.purchasing.Permission.NOTIFY" />
+            </intent-filter>
+        </receiver>
+    </application>
+
 </manifest>
