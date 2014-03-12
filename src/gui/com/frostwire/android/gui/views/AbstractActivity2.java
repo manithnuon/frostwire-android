@@ -42,11 +42,11 @@ public abstract class AbstractActivity2 extends Activity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstance) {
-        super.onCreate(savedInstance);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         setContentView(layoutResId);
-        initComponents();
+        initComponents(savedInstanceState);
     }
 
     @SuppressWarnings("unchecked")
@@ -54,5 +54,5 @@ public abstract class AbstractActivity2 extends Activity {
         return (T) super.findViewById(id);
     }
 
-    protected abstract void initComponents();
+    protected abstract void initComponents(Bundle savedInstanceState);
 }
