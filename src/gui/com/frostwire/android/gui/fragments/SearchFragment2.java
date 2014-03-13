@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2013, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,9 +19,12 @@
 package com.frostwire.android.gui.fragments;
 
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.frostwire.android.R;
 import com.frostwire.android.gui.views.AbstractFragment2;
+import com.frostwire.android.gui.views.SearchInputView;
+import com.frostwire.android.gui.views.SearchInputView.OnSearchListener;
 
 /**
  * @author gubatron
@@ -30,11 +33,39 @@ import com.frostwire.android.gui.views.AbstractFragment2;
  */
 public final class SearchFragment2 extends AbstractFragment2 {
 
+    private SearchInputView searchInput;
+    private ProgressBar deepSearchProgress;
+
     public SearchFragment2() {
         super(R.layout.fragment_search2);
     }
 
     @Override
     protected void initComponents(View rootView) {
+
+        searchInput = findView(rootView, R.id.fragment_search_input);
+        searchInput.setOnSearchListener(new SearchInputListener());
+
+        deepSearchProgress = findView(rootView, R.id.fragment_search_deepsearch_progress);
+        deepSearchProgress.setVisibility(View.GONE);
+    }
+
+    private static final class SearchInputListener implements OnSearchListener {
+
+        @Override
+        public void onSearch(SearchInputView v, String query, int mediaTypeId) {
+            //performSearch(query, mediaTypeId);
+        }
+
+        @Override
+        public void onMediaTypeSelected(SearchInputView v, int mediaTypeId) {
+            //adapter.setFileType(mediaTypeId);
+            //showSearchView(view);
+        }
+
+        @Override
+        public void onClear(SearchInputView v) {
+            //cancelSearch(view);
+        }
     }
 }
