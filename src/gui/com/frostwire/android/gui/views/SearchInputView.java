@@ -18,6 +18,8 @@
 
 package com.frostwire.android.gui.views;
 
+import java.lang.ref.WeakReference;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -34,6 +36,7 @@ import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.gui.util.OSUtils;
 import com.frostwire.android.gui.views.ClearableEditTextView.OnActionListener;
+import com.frostwire.util.Ref;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
 
@@ -50,7 +53,7 @@ public class SearchInputView extends LinearLayout {
 
     private View dummyFocusView;
 
-    private OnSearchListener onSearchListener;
+    private OnSearchListener listener;
 
     private int mediaTypeId;
 
@@ -61,11 +64,11 @@ public class SearchInputView extends LinearLayout {
     }
 
     public OnSearchListener getOnSearchListener() {
-        return onSearchListener;
+        return listener;
     }
 
     public void setOnSearchListener(OnSearchListener listener) {
-        this.onSearchListener = listener;
+        this.listener = listener;
     }
 
     public boolean isEmpty() {
@@ -88,30 +91,11 @@ public class SearchInputView extends LinearLayout {
 
         mediaTypeId = ConfigurationManager.instance().getLastMediaTypeFilter();
 
+        TextInputListener textInputListener = new TextInputListener(this);
         textInput = (ClearableEditTextView) findViewById(R.id.view_search_input_text_input);
-        textInput.setOnKeyListener(new OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
-                    startSearch(v);
-                    return true;
-                }
-                return false;
-            }
-        });
-        textInput.setOnActionListener(new OnActionListener() {
-            public void onTextChanged(ClearableEditTextView v, String str) {
-            }
-
-            public void onClear(ClearableEditTextView v) {
-                SearchInputView.this.onClear();
-            }
-        });
-        textInput.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startSearch(textInput);
-            }
-        });
+        textInput.setOnKeyListener(textInputListener);
+        textInput.setOnActionListener(textInputListener);
+        textInput.setOnItemClickListener(textInputListener);
         textInput.setAdapter(adapter);
 
         updateHint(mediaTypeId);
@@ -143,20 +127,20 @@ public class SearchInputView extends LinearLayout {
     }
 
     private void onSearch(String query, int mediaTypeId) {
-        if (onSearchListener != null) {
-            onSearchListener.onSearch(this, query, mediaTypeId);
+        if (listener != null) {
+            listener.onSearch(this, query, mediaTypeId);
         }
     }
 
     private void onMediaTypeSelected(int mediaTypeId) {
-        if (onSearchListener != null) {
-            onSearchListener.onMediaTypeSelected(this, mediaTypeId);
+        if (listener != null) {
+            listener.onMediaTypeSelected(this, mediaTypeId);
         }
     }
 
     private void onClear() {
-        if (onSearchListener != null) {
-            onSearchListener.onClear(this);
+        if (listener != null) {
+            listener.onClear(this);
         }
     }
 
@@ -178,15 +162,9 @@ public class SearchInputView extends LinearLayout {
         textInput.setHint(hint);
     }
 
-    private RadioButton initRadioButton(int viewId, final byte fileType) {
+    private RadioButton initRadioButton(int viewId, byte fileType) {
         final RadioButton button = (RadioButton) findViewById(viewId);
-        button.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                radioButtonFileTypeClick(fileType);
-                UXStats.instance().log(UXAction.SEARCH_RESULT_FILE_TYPE_CLICK);
-            }
-        });
+        button.setOnClickListener(new RadioButtonClickListener(this, fileType));
 
         if (mediaTypeId == fileType) {
             button.setChecked(true);
@@ -251,5 +229,60 @@ public class SearchInputView extends LinearLayout {
     public void setFileTypeCountersVisible(boolean fileTypeCountersVisible) {
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.view_search_input_radiogroup_file_type);
         radioGroup.setVisibility(fileTypeCountersVisible ? View.VISIBLE : View.GONE);
+    }
+
+    private static final class TextInputListener implements OnKeyListener, OnActionListener, OnItemClickListener {
+
+        private final WeakReference<SearchInputView> viewRef;
+
+        public TextInputListener(SearchInputView view) {
+            this.viewRef = Ref.weak(view);
+        }
+
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (Ref.alive(viewRef) && keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                viewRef.get().startSearch(v);
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void onTextChanged(ClearableEditTextView v, String str) {
+        }
+
+        @Override
+        public void onClear(ClearableEditTextView v) {
+            if (Ref.alive(viewRef)) {
+                viewRef.get().onClear();
+            }
+        }
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (Ref.alive(viewRef)) {
+                viewRef.get().startSearch(viewRef.get().textInput);
+            }
+        }
+    }
+
+    private static final class RadioButtonClickListener implements OnClickListener {
+
+        private final WeakReference<SearchInputView> viewRef;
+        private final byte fileType;
+
+        public RadioButtonClickListener(SearchInputView view, byte fileType) {
+            this.viewRef = Ref.weak(view);
+            this.fileType = fileType;
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (Ref.alive(viewRef)) {
+                viewRef.get().radioButtonFileTypeClick(fileType);
+                UXStats.instance().log(UXAction.SEARCH_RESULT_FILE_TYPE_CLICK);
+            }
+        }
     }
 }

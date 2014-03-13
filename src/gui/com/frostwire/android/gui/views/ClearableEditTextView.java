@@ -183,7 +183,7 @@ public class ClearableEditTextView extends RelativeLayout {
         public void onClear(ClearableEditTextView v);
     }
 
-    private static class SingleLineTransformationMethod extends ReplacementTransformationMethod {
+    private static final class SingleLineTransformationMethod extends ReplacementTransformationMethod {
 
         private static char[] ORIGINAL = { '\n', '\r' };
         private static char[] REPLACEMENT = { '\uFEFF', '\uFEFF' };
@@ -197,7 +197,7 @@ public class ClearableEditTextView extends RelativeLayout {
         }
     }
 
-    private static class InputTextWatcher implements TextWatcher {
+    private static final class InputTextWatcher implements TextWatcher {
 
         private final WeakReference<ClearableEditTextView> viewRef;
 
@@ -231,7 +231,7 @@ public class ClearableEditTextView extends RelativeLayout {
         }
     }
 
-    private static class InputTouchListener implements OnTouchListener {
+    private static final class InputTouchListener implements OnTouchListener {
 
         private final WeakReference<AutoCompleteTextView> inputRef;
 
@@ -249,7 +249,7 @@ public class ClearableEditTextView extends RelativeLayout {
         }
     }
 
-    private static class ClearClickListener implements OnClickListener {
+    private static final class ClearClickListener implements OnClickListener {
 
         private final WeakReference<ClearableEditTextView> viewRef;
 
