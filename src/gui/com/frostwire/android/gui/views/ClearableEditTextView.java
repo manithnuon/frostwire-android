@@ -204,15 +204,17 @@ public class ClearableEditTextView extends RelativeLayout {
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (Ref.alive(viewRef)) {
+                ClearableEditTextView view = viewRef.get();
+
                 if (s.length() > 0) {
-                    viewRef.get().setImageSearchVisibility(View.GONE);
-                    viewRef.get().setButtonClearVisibility(View.VISIBLE);
+                    view.setImageSearchVisibility(View.GONE);
+                    view.setButtonClearVisibility(View.VISIBLE);
                 } else {
-                    viewRef.get().setImageSearchVisibility(View.VISIBLE);
-                    viewRef.get().setButtonClearVisibility(View.GONE);
+                    view.setImageSearchVisibility(View.VISIBLE);
+                    view.setButtonClearVisibility(View.GONE);
                 }
-                viewRef.get().onTextChanged(s.toString());
-                viewRef.get().setListSelection(-1);
+                view.onTextChanged(s.toString());
+                view.setListSelection(-1);
             }
         }
 
