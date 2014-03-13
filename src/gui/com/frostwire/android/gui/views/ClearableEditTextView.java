@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011, 2012, FrostWire(TM). All rights reserved.
+ * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,6 +55,7 @@ public class ClearableEditTextView extends RelativeLayout {
 
         TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.ClearableEditTextView);
         hint = arr.getString(R.styleable.ClearableEditTextView_clearable_hint);
+        arr.recycle();
     }
 
     public OnActionListener getOnActionListener() {
@@ -100,6 +101,10 @@ public class ClearableEditTextView extends RelativeLayout {
         input.setText(text);
     }
 
+    public int getListSelection() {
+        return input.getListSelection();
+    }
+
     public void setListSelection(int position) {
         input.setListSelection(position);
     }
@@ -111,11 +116,11 @@ public class ClearableEditTextView extends RelativeLayout {
     public void selectAll() {
         input.selectAll();
     }
-    
+
     public String getHint() {
         return (String) input.getHint();
     }
-    
+
     public void setHint(String hint) {
         input.setHint(hint);
     }
@@ -184,7 +189,7 @@ public class ClearableEditTextView extends RelativeLayout {
             listener.onClear(this);
         }
     }
-    
+
     public static interface OnActionListener {
 
         public void onTextChanged(View v, String str);
@@ -194,8 +199,8 @@ public class ClearableEditTextView extends RelativeLayout {
 
     private static class SingleLineTransformationMethod extends ReplacementTransformationMethod {
 
-        private static char[] ORIGINAL = new char[] { '\n', '\r' };
-        private static char[] REPLACEMENT = new char[] { '\uFEFF', '\uFEFF' };
+        private static char[] ORIGINAL = { '\n', '\r' };
+        private static char[] REPLACEMENT = { '\uFEFF', '\uFEFF' };
 
         protected char[] getOriginal() {
             return ORIGINAL;
