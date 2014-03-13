@@ -34,7 +34,6 @@ import android.widget.RadioGroup;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
-import com.frostwire.android.gui.util.OSUtils;
 import com.frostwire.android.gui.views.ClearableEditTextView.OnActionListener;
 import com.frostwire.util.Ref;
 import com.frostwire.uxstats.UXAction;
@@ -77,6 +76,51 @@ public class SearchInputView extends LinearLayout {
 
     public String getText() {
         return textInput.getText();
+    }
+
+    public boolean isFileTypeCountersVisible() {
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.view_search_input_radiogroup_file_type);
+        return radioGroup.getVisibility() == View.VISIBLE;
+    }
+
+    public void setFileTypeCountersVisible(boolean fileTypeCountersVisible) {
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.view_search_input_radiogroup_file_type);
+        radioGroup.setVisibility(fileTypeCountersVisible ? View.VISIBLE : View.GONE);
+    }
+
+    public void updateFileTypeCounter(byte fileType, int numFiles) {
+        try {
+            int radioId = Constants.FILE_TYPE_AUDIO;
+            switch (fileType) {
+            case Constants.FILE_TYPE_AUDIO:
+                radioId = R.id.view_search_input_radio_audio;
+                break;
+            case Constants.FILE_TYPE_VIDEOS:
+                radioId = R.id.view_search_input_radio_videos;
+                break;
+            case Constants.FILE_TYPE_PICTURES:
+                radioId = R.id.view_search_input_radio_pictures;
+                break;
+            case Constants.FILE_TYPE_APPLICATIONS:
+                radioId = R.id.view_search_input_radio_applications;
+                break;
+            case Constants.FILE_TYPE_DOCUMENTS:
+                radioId = R.id.view_search_input_radio_documents;
+                break;
+            case Constants.FILE_TYPE_TORRENTS:
+                radioId = R.id.view_search_input_radio_torrents;
+                break;
+            }
+
+            RadioButton rButton = (RadioButton) findViewById(radioId);
+            String numFilesStr = String.valueOf(numFiles);
+            if (numFiles > 9999) {
+                numFilesStr = "+1k";
+            }
+            rButton.setText(numFilesStr);
+        } catch (Throwable e) {
+            // NPE
+        }
     }
 
     @Override
@@ -153,12 +197,6 @@ public class SearchInputView extends LinearLayout {
 
     private void updateHint(int fileType) {
         String hint = getContext().getString(R.string.search_label) + " " + getContext().getString(R.string.files);
-
-        if (OSUtils.isOUYA()) {
-            String ouyaSearchHintPrefix = getContext().getResources().getString(R.string.ouya_search_hint_prefix);
-            hint = ouyaSearchHintPrefix + " " + hint;
-        }
-
         textInput.setHint(hint);
     }
 
@@ -177,7 +215,7 @@ public class SearchInputView extends LinearLayout {
         updateHint(mediaTypeId);
         onMediaTypeSelected(mediaTypeId);
 
-        SearchInputView.this.mediaTypeId = mediaTypeId;
+        this.mediaTypeId = mediaTypeId;
         ConfigurationManager.instance().setLastMediaTypeFilter(mediaTypeId);
     }
 
@@ -188,47 +226,6 @@ public class SearchInputView extends LinearLayout {
         public void onMediaTypeSelected(SearchInputView v, int mediaTypeId);
 
         public void onClear(SearchInputView v);
-    }
-
-    public void updateFileTypeCounter(byte fileType, int numFiles) {
-        try {
-            int radioId = Constants.FILE_TYPE_AUDIO;
-            switch (fileType) {
-            case Constants.FILE_TYPE_AUDIO:
-                radioId = R.id.view_search_input_radio_audio;
-                break;
-            case Constants.FILE_TYPE_VIDEOS:
-                radioId = R.id.view_search_input_radio_videos;
-                break;
-            case Constants.FILE_TYPE_PICTURES:
-                radioId = R.id.view_search_input_radio_pictures;
-                break;
-            case Constants.FILE_TYPE_APPLICATIONS:
-                radioId = R.id.view_search_input_radio_applications;
-                break;
-            case Constants.FILE_TYPE_DOCUMENTS:
-                radioId = R.id.view_search_input_radio_documents;
-                break;
-            case Constants.FILE_TYPE_TORRENTS:
-                radioId = R.id.view_search_input_radio_torrents;
-                break;
-
-            }
-
-            RadioButton rButton = (RadioButton) findViewById(radioId);
-            String numFilesStr = String.valueOf(numFiles);
-            if (numFiles > 9999) {
-                numFilesStr = "+1k";
-            }
-            rButton.setText(numFilesStr);
-        } catch (Throwable e) {
-            // NPE
-        }
-    }
-
-    public void setFileTypeCountersVisible(boolean fileTypeCountersVisible) {
-        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.view_search_input_radiogroup_file_type);
-        radioGroup.setVisibility(fileTypeCountersVisible ? View.VISIBLE : View.GONE);
     }
 
     private static final class TextInputListener implements OnKeyListener, OnActionListener, OnItemClickListener {
