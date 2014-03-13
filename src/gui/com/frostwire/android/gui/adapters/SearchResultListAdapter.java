@@ -86,11 +86,11 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
         if (sr instanceof FileSearchResult) {
             populateFilePart(view, (FileSearchResult) sr);
         }
-        if (sr instanceof TorrentSearchResult) {
-            populateTorrentPart(view, (TorrentSearchResult) sr);
-        }
         if (sr instanceof YouTubeCrawledSearchResult) {
             populateYouTubePart(view, (YouTubeCrawledSearchResult) sr);
+        }
+        if (sr instanceof TorrentSearchResult) {
+            populateTorrentPart(view, (TorrentSearchResult) sr);
         }
     }
 
@@ -158,7 +158,7 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
         ArrayList<SearchResult> l = new ArrayList<SearchResult>();
         for (SearchResult sr : results) {
             MediaType mt = MediaType.getMediaTypeForExtension(FilenameUtils.getExtension(((FileSearchResult) sr).getFilename()));
-            if (accept(sr,mt)) {
+            if (accept(sr, mt)) {
                 l.add(sr);
             }
             fsr.increment(mt);
@@ -197,7 +197,7 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
         }
     }
 
-    private static class OnLinkClickListener implements OnClickListener {
+    private static final class OnLinkClickListener implements OnClickListener {
 
         @Override
         public void onClick(View v) {
@@ -208,8 +208,8 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
             UXStats.instance().log(UXAction.SEARCH_RESULT_SOURCE_VIEW);
         }
     }
-    
-    public static class FilteredSearchResults {
+
+    public static final class FilteredSearchResults {
         public List<SearchResult> filtered;
         public int numAudio;
         public int numVideo;
@@ -217,7 +217,7 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
         public int numApplications;
         public int numDocuments;
         public int numTorrents;
-        
+
         private void increment(MediaType mt) {
             if (mt != null) {
                 switch (mt.getId()) {
