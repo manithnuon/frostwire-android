@@ -42,7 +42,7 @@
         android:layout_height="match_parent" >
 
         <ListView
-            android:id="@+id/fragment_search_list"
+            android:id="@+id/fragment_search_results_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fastScrollEnabled="true" />

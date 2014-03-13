@@ -154,13 +154,13 @@ public final class MainActivity2 extends AbstractActivity2 {
         }
 
         public void onDrawerClosed(View view) {
-            if (activityRef.get() != null) {
+            if (Ref.alive(activityRef)) {
                 activityRef.get().invalidateOptionsMenu();
             }
         }
 
         public void onDrawerOpened(View drawerView) {
-            if (activityRef.get() != null) {
+            if (Ref.alive(activityRef)) {
                 activityRef.get().invalidateOptionsMenu();
             }
         }
@@ -176,7 +176,7 @@ public final class MainActivity2 extends AbstractActivity2 {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (activityRef.get() != null) {
+            if (Ref.alive(activityRef)) {
                 activityRef.get().selectItem(position, true);
             }
         }

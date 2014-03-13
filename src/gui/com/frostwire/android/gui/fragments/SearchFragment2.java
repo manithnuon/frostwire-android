@@ -18,10 +18,13 @@
 
 package com.frostwire.android.gui.fragments;
 
+import android.os.Bundle;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.frostwire.android.R;
+import com.frostwire.android.gui.adapters.SearchResultsAdapter;
 import com.frostwire.android.gui.views.AbstractFragment2;
 import com.frostwire.android.gui.views.SearchInputView;
 import com.frostwire.android.gui.views.SearchInputView.OnSearchListener;
@@ -35,9 +38,20 @@ public final class SearchFragment2 extends AbstractFragment2 {
 
     private SearchInputView searchInput;
     private ProgressBar deepSearchProgress;
+    private ListView resultsList;
+
+    private SearchResultsAdapter adapter;
 
     public SearchFragment2() {
         super(R.layout.fragment_search2);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        adapter = new SearchResultsAdapter(getActivity());
+        resultsList.setAdapter(adapter);
     }
 
     @Override
@@ -48,6 +62,8 @@ public final class SearchFragment2 extends AbstractFragment2 {
 
         deepSearchProgress = findView(rootView, R.id.fragment_search_deepsearch_progress);
         deepSearchProgress.setVisibility(View.GONE);
+
+        resultsList = findView(rootView, R.id.fragment_search_results_list);
     }
 
     private static final class SearchInputListener implements OnSearchListener {

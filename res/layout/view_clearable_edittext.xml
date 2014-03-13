@@ -37,7 +37,8 @@
         android:paddingRight="38dp"
         android:singleLine="true"
         android:textColor="@android:color/black"
-        android:textColorHint="@color/clearable_edittext_hint_color" />
+        android:textColorHint="@color/clearable_edittext_hint_color"
+        android:textCursorDrawable="@null" />
 
     <ImageView
         android:id="@+id/view_clearable_edit_text_image_search"
