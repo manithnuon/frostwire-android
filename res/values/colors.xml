@@ -2,7 +2,7 @@
 <!--
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2013, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
     <color name="tab_text_view">#ff5a7e9c</color>
     <color name="frostwire_gray_explanation_text">#ff99aabb</color>
     <color name="frostwire_quickaction_separator">#ff839fb3</color>
+    <color name="clearable_edittext_hint_color">#ffbfcfdc</color>
 
     <!-- colors for tab gradients, start is bottom, end is top (90 degrees) -->
     <color name="tab_gradient_start_on">#ffd3e5ed</color>
