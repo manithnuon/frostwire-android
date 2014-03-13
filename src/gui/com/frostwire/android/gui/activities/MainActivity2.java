@@ -107,9 +107,11 @@ public final class MainActivity2 extends AbstractActivity2 {
         Fragment f = createFragmentByMenuId(menuItem.id);
         FragmentTransaction t = getFragmentManager().beginTransaction();
         t.replace(R.id.activity_main_content_frame, f);
-        if (stack) {
+
+        if (stack && t.isAddToBackStackAllowed()) {
             t.addToBackStack(null);
         }
+
         t.commit();
 
         drawerList.setItemChecked(position, true);
