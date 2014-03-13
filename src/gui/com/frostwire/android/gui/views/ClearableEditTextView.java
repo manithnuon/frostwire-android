@@ -18,6 +18,8 @@
 
 package com.frostwire.android.gui.views;
 
+import java.lang.ref.WeakReference;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.text.Editable;
@@ -35,6 +37,7 @@ import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
 
 import com.frostwire.android.R;
+import com.frostwire.util.Ref;
 
 /**
  * @author gubatron
@@ -134,48 +137,19 @@ public class ClearableEditTextView extends RelativeLayout {
         input = (AutoCompleteTextView) findViewById(R.id.view_clearable_edit_text_input);
         input.setHint(hint);
         input.setTransformationMethod(new SingleLineTransformationMethod());
-        input.addTextChangedListener(new TextWatcher() {
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() > 0) {
-                    imageSearch.setVisibility(View.GONE);
-                    buttonClear.setVisibility(View.VISIBLE);
-                } else {
-                    imageSearch.setVisibility(View.VISIBLE);
-                    buttonClear.setVisibility(View.GONE);
-                }
-                ClearableEditTextView.this.onTextChanged(s.toString());
-                input.setListSelection(-1);
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            public void afterTextChanged(Editable s) {
-            }
-        });
+        input.addTextChangedListener(new InputTextWatcher(this));
 
         // workaround for android issue: http://code.google.com/p/android/issues/detail?id=2516
         // the comment http://code.google.com/p/android/issues/detail?id=2516#c9
         // seems a little overkill for this situation, but it could work for a general situation.
-        input.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                input.requestFocusFromTouch();
-                return false;
-            }
-        });
+        input.setOnTouchListener(new InputTouchListener(input));
 
         imageSearch = (ImageView) findViewById(R.id.view_clearable_edit_text_image_search);
         imageSearch.setVisibility(RelativeLayout.VISIBLE);
 
         buttonClear = (ImageButton) findViewById(R.id.view_clearable_edit_text_button_clear);
         buttonClear.setVisibility(RelativeLayout.GONE);
-        buttonClear.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                input.setText("");
-                onClear();
-            }
-        });
+        buttonClear.setOnClickListener(new ClearClickListener(this));
     }
 
     private void onTextChanged(String str) {
@@ -188,6 +162,14 @@ public class ClearableEditTextView extends RelativeLayout {
         if (listener != null) {
             listener.onClear(this);
         }
+    }
+
+    private void setImageSearchVisibility(int visibility) {
+        imageSearch.setVisibility(visibility);
+    }
+
+    private void setButtonClearVisibility(int visibility) {
+        buttonClear.setVisibility(visibility);
     }
 
     public static interface OnActionListener {
@@ -208,6 +190,73 @@ public class ClearableEditTextView extends RelativeLayout {
 
         protected char[] getReplacement() {
             return REPLACEMENT;
+        }
+    }
+
+    private static class InputTextWatcher implements TextWatcher {
+
+        private final WeakReference<ClearableEditTextView> viewRef;
+
+        public InputTextWatcher(ClearableEditTextView view) {
+            this.viewRef = Ref.weak(view);
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (Ref.alive(viewRef)) {
+                if (s.length() > 0) {
+                    viewRef.get().setImageSearchVisibility(View.GONE);
+                    viewRef.get().setButtonClearVisibility(View.VISIBLE);
+                } else {
+                    viewRef.get().setImageSearchVisibility(View.VISIBLE);
+                    viewRef.get().setButtonClearVisibility(View.GONE);
+                }
+                viewRef.get().onTextChanged(s.toString());
+                viewRef.get().setListSelection(-1);
+            }
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
+    }
+
+    private static class InputTouchListener implements OnTouchListener {
+
+        private final WeakReference<AutoCompleteTextView> inputRef;
+
+        public InputTouchListener(AutoCompleteTextView input) {
+            this.inputRef = Ref.weak(input);
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (Ref.alive(inputRef)) {
+                inputRef.get().requestFocusFromTouch();
+            }
+
+            return false;
+        }
+    }
+
+    private static class ClearClickListener implements OnClickListener {
+
+        private final WeakReference<ClearableEditTextView> viewRef;
+
+        public ClearClickListener(ClearableEditTextView view) {
+            this.viewRef = Ref.weak(view);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (Ref.alive(viewRef)) {
+                viewRef.get().setText("");
+                viewRef.get().onClear();
+            }
         }
     }
 }

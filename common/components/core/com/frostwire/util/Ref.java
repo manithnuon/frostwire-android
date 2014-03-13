@@ -19,6 +19,7 @@
 package com.frostwire.util;
 
 import java.lang.ref.PhantomReference;
+import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
@@ -48,5 +49,9 @@ public final class Ref {
 
     public static <T> PhantomReference<T> phantom(T obj, ReferenceQueue<? super T> q) {
         return new PhantomReference<T>(obj, q);
+    }
+
+    public static <T> boolean alive(Reference<T> ref) {
+        return ref.get() != null;
     }
 }
