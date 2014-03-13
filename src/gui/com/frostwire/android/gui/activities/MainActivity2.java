@@ -51,6 +51,8 @@ public final class MainActivity2 extends AbstractActivity2 {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
 
+    private int lastSelectedItem = -1;
+
     public MainActivity2() {
         super(R.layout.activity_main2);
     }
@@ -103,18 +105,23 @@ public final class MainActivity2 extends AbstractActivity2 {
     }
 
     private void selectItem(int position, boolean stack) {
-        XmlMenuItem menuItem = (XmlMenuItem) drawerList.getItemAtPosition(position);
-        Fragment f = createFragmentByMenuId(menuItem.id);
-        FragmentTransaction t = getFragmentManager().beginTransaction();
-        t.replace(R.id.activity_main_content_frame, f);
+        if (lastSelectedItem != position) {
+            lastSelectedItem = position;
 
-        if (stack && t.isAddToBackStackAllowed()) {
-            t.addToBackStack(null);
+            XmlMenuItem menuItem = (XmlMenuItem) drawerList.getItemAtPosition(position);
+            Fragment f = createFragmentByMenuId(menuItem.id);
+            FragmentTransaction t = getFragmentManager().beginTransaction();
+            t.replace(R.id.activity_main_content_frame, f);
+
+            if (stack && t.isAddToBackStackAllowed()) {
+                t.addToBackStack(null);
+            }
+
+            t.commit();
+
+            drawerList.setItemChecked(position, true);
         }
 
-        t.commit();
-
-        drawerList.setItemChecked(position, true);
         drawerLayout.closeDrawer(drawerList);
     }
 
