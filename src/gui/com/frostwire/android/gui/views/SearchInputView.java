@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2013, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@ public class SearchInputView extends LinearLayout {
     private final SuggestionsAdapter adapter;
 
     private ClearableEditTextView textInput;
-    
+
     private View dummyFocusView;
 
     private OnSearchListener onSearchListener;
@@ -76,10 +76,6 @@ public class SearchInputView extends LinearLayout {
         return textInput.getText();
     }
 
-    public void updateHint(String newHint) {
-        textInput.setHint(newHint);
-    }
-
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -103,10 +99,10 @@ public class SearchInputView extends LinearLayout {
             }
         });
         textInput.setOnActionListener(new OnActionListener() {
-            public void onTextChanged(View v, String str) {
+            public void onTextChanged(ClearableEditTextView v, String str) {
             }
 
-            public void onClear(View v) {
+            public void onClear(ClearableEditTextView v) {
                 SearchInputView.this.onClear();
             }
         });
@@ -128,7 +124,7 @@ public class SearchInputView extends LinearLayout {
         initRadioButton(R.id.view_search_input_radio_torrents, Constants.FILE_TYPE_TORRENTS);
 
         setFileTypeCountersVisible(false);
-        
+
         dummyFocusView = findViewById(R.id.view_search_input_linearlayout_dummy);
     }
 
@@ -142,7 +138,7 @@ public class SearchInputView extends LinearLayout {
         if (query.length() > 0) {
             onSearch(query, mediaTypeId);
         }
-        
+
         dummyFocusView.requestFocus();
     }
 
@@ -209,11 +205,11 @@ public class SearchInputView extends LinearLayout {
 
     public static interface OnSearchListener {
 
-        public void onSearch(View v, String query, int mediaTypeId);
+        public void onSearch(SearchInputView v, String query, int mediaTypeId);
 
-        public void onMediaTypeSelected(View v, int mediaTypeId);
+        public void onMediaTypeSelected(SearchInputView v, int mediaTypeId);
 
-        public void onClear(View v);
+        public void onClear(SearchInputView v);
     }
 
     public void updateFileTypeCounter(byte fileType, int numFiles) {

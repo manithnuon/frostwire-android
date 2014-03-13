@@ -55,11 +55,11 @@ public class BrowsePeerSearchBarView extends RelativeLayout {
         };
 
         inputSearchListener = new ClearableEditTextView.OnActionListener() {
-            public void onTextChanged(View v, String str) {
+            public void onTextChanged(ClearableEditTextView v, String str) {
                 onFilter(str);
             }
 
-            public void onClear(View v) {
+            public void onClear(ClearableEditTextView v) {
                 onFilter("");
             }
         };

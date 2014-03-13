@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011, 2012, FrostWire(TM). All rights reserved.
+ * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ import com.frostwire.util.HttpClientFactory;
  * @author aldenml
  * 
  */
-class SuggestionsAdapter extends SimpleCursorAdapter {
+final class SuggestionsAdapter extends SimpleCursorAdapter {
 
     private static final String SUGGESTIONS_URL = buildSuggestionsUrl();
     private static final int HTTP_QUERY_TIMEOUT = 1000;

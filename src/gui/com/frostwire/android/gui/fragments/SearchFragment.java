@@ -134,16 +134,16 @@ public final class SearchFragment extends AbstractListFragment implements MainFr
 
         searchInput = findView(view, R.id.fragment_search_input);
         searchInput.setOnSearchListener(new OnSearchListener() {
-            public void onSearch(View v, String query, int mediaTypeId) {
+            public void onSearch(SearchInputView v, String query, int mediaTypeId) {
                 performSearch(query, mediaTypeId);
             }
 
-            public void onMediaTypeSelected(View v, int mediaTypeId) {
+            public void onMediaTypeSelected(SearchInputView v, int mediaTypeId) {
                 adapter.setFileType(mediaTypeId);
                 showSearchView(view);
             }
 
-            public void onClear(View v) {
+            public void onClear(SearchInputView v) {
                 cancelSearch(view);
             }
         });

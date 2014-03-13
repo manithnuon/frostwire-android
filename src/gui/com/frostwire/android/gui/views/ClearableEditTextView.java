@@ -134,6 +134,10 @@ public class ClearableEditTextView extends RelativeLayout {
 
         View.inflate(getContext(), R.layout.view_clearable_edittext, this);
 
+        if (isInEditMode()) {
+            return;
+        }
+
         input = (AutoCompleteTextView) findViewById(R.id.view_clearable_edit_text_input);
         input.setHint(hint);
         input.setTransformationMethod(new SingleLineTransformationMethod());
@@ -174,9 +178,9 @@ public class ClearableEditTextView extends RelativeLayout {
 
     public static interface OnActionListener {
 
-        public void onTextChanged(View v, String str);
+        public void onTextChanged(ClearableEditTextView v, String str);
 
-        public void onClear(View v);
+        public void onClear(ClearableEditTextView v);
     }
 
     private static class SingleLineTransformationMethod extends ReplacementTransformationMethod {
